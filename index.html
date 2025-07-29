@@ -285,21 +285,6 @@
             to { transform: rotate(360deg); }
         }
 
-        .uploaded-urls {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 12px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .uploaded-urls h4 {
-            margin-bottom: 10px;
-            color: #333;
-        }
-
         .url-item {
             margin-bottom: 8px;
             word-break: break-all;
@@ -376,10 +361,6 @@
                 <div class="success-icon">✅</div>
                 <h3>Upload completed successfully!</h3>
                 <p id="resultDetails"></p>
-                <div class="uploaded-urls" id="uploadedUrls" style="display: none;">
-                    <h4>📎 Uploaded Photo URLs:</h4>
-                    <div id="urlList"></div>
-                </div>
                 <button class="reset-button" onclick="resetApp()">Upload More</button>
             </div>
         </div>
@@ -407,8 +388,6 @@
         const progressContainer = document.getElementById('progressContainer');
         const resultMessage = document.getElementById('resultMessage');
         const resultDetails = document.getElementById('resultDetails');
-        const uploadedUrlsDiv = document.getElementById('uploadedUrls');
-        const urlList = document.getElementById('urlList');
 
         // 파일 선택 이벤트
         fileInput.addEventListener('change', handleFileSelect);
@@ -502,7 +481,7 @@
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
-            formData.append('folder', 'serial-photos');
+            formData.append('folder', 'serial-number-photos');
             
             // 파일명 생성 (타임스탬프 + 인덱스)
             const timestamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, '');
@@ -623,14 +602,6 @@
                     }
                     
                     resultDetails.innerHTML = message;
-                    
-                    // 업로드된 URL 표시
-                    if (uploadedUrls.length > 0) {
-                        urlList.innerHTML = uploadedUrls.map(url => 
-                            `<div class="url-item"><a href="${url}" target="_blank">${url}</a></div>`
-                        ).join('');
-                        uploadedUrlsDiv.style.display = 'block';
-                    }
                 } else {
                     resultMessage.className = 'result-message error';
                     let errorMessage = '<strong>All uploads failed.</strong><br><br>';
@@ -656,7 +627,6 @@
             fileInput.value = '';
             resultMessage.style.display = 'none';
             progressContainer.style.display = 'none';
-            uploadedUrlsDiv.style.display = 'none';
             uploadButton.disabled = true;
             uploadButton.innerHTML = '📤 Upload Photos';
             updateUI();
